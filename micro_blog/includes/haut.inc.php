@@ -62,7 +62,7 @@
 							}
 							else {
 						?>
-						<a href="./connexion.php" style="display:inline; float:left;">Inscription</a>
+						<a href="./inscription.php" style="display:inline; float:left;">Inscription</a>
 						<a href="./connexion.php" style="display:inline; float:right;">Connexion</a>
 
 						<?php
