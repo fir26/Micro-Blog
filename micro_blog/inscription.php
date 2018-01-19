@@ -1,13 +1,18 @@
 <?php
 	include("includes/connexion.inc.php");
-
+	// VERIFICATION FORMULAIRE REMPLI ET CASE COCHER
 	if(isset($_POST['email']) && isset($_POST['checkbox'])) {
+		// VERIFICATION NOMBRE DE LIGNE POUR EMAIL DANS FORMULAIRE AFIN D'EVITER DOUBLON
 		$stmt = $pdo->prepare('SELECT COUNT(*) FROM utilisateurs WHERE email = ?');
 		$stmt->execute(array($_POST['email']));
 			if ($stmt->fetchColumn() != 0) {
+				// JE N'AI PAS REUSSI A BIEN FAIRE FONCTIONNER LES ALERTES
+				// DONC J'AI UTILISE UN SIMPLE ECHO POUR PREVENIR L'UTILISATEUR
 				echo "Email déjà inscrit (Vous allez être redirigé...)";
+				// ET UNE REDIRECTION
 				echo "<script>setTimeout(\"location.href = 'index.php';\",1500);</script>";
 			}else{
+				//REQUETE INSERTION SI AUCUN DOUBLON TROUVER
 				$sql="INSERT INTO utilisateurs (email,mdp) VALUES (:email,:mdp)";
 				$prep=$pdo->prepare($sql);
 				$prep->bindValue(':email',$_POST['email']);

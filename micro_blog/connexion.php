@@ -1,11 +1,12 @@
 <?php
 	include("includes/connexion.inc.php");
 
+	// VERIFICATION FORMULAIRE REMPLI
 	if(isset($_POST['email'])) {
 		$sql="SELECT * FROM utilisateurs";
 		$stmt=$pdo->query($sql);
 		while($data=$stmt->fetch()) {
-			if($_POST['email']==$data['email'] && $_POST['password']==$data['mdp']) {
+			if($_POST['email']==$data['email'] && md5($_POST['password'])==$data['mdp']) {
 				$sid = md5($_POST['email'].time());
 
 				$sql="UPDATE utilisateurs SET sid=:sid WHERE email=:email";

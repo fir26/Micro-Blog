@@ -47,11 +47,16 @@
 										$page = (!empty($_GET['page']) ? $_GET['page'] : 1);
 										$limite = 5;
 										$debut = ($page - 1) * $limite;
-										$query = 'SELECT * FROM messages LIMIT :limite OFFSET :debut';
+										$query = 'SELECT SQL_CALC_FOUND_ROWS * FROM messages ORDER BY date DESC LIMIT :limite OFFSET :debut';
 										$query = $pdo->prepare($query);
-										$query->bindValue('limite', $limite, PDO::PARAM_INT);
 										$query->bindValue('debut', $debut, PDO::PARAM_INT);
+										$query->bindValue('limite', $limite, PDO::PARAM_INT);
 										$query->execute();
+
+										$resultFoundRows = $pdo->query('SELECT found_rows()');
+										$nombredElementsTotal = $resultFoundRows->fetchColumn();
+										$nombreDePages = ceil($nombredElementsTotal / $limite);
+										
 										while ($data = $query->fetch()) {
 									?>
 									<blockquote>
@@ -74,18 +79,6 @@
             </div>
 						<?php
 						// PAGINATION
-						$debut = ($page - 1) * $limite;
-						$query = 'SELECT SQL_CALC_FOUND_ROWS * FROM messages LIMIT :limite OFFSET :debut';
-						$query = $pdo->prepare($query);
-						$query->bindValue('debut', $debut, PDO::PARAM_INT);
-						$query->bindValue('limite', $limite, PDO::PARAM_INT);
-						$query->execute();
-
-						$resultFoundRows = $pdo->query('SELECT found_rows()');
-
-						$nombredElementsTotal = $resultFoundRows->fetchColumn();
-
-						$nombreDePages = ceil($nombredElementsTotal / $limite);
 
 						if ($page > 1):
 								?><a href="?page=<?php echo $page - 1; ?>">Page précédente</a> — <?php
