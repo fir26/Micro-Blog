@@ -1,6 +1,7 @@
 <?php
-	include ("verif-util.inc.php");
+	include("verif_util.inc.php");
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -11,7 +12,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Micro blog</title>
+    <title>Micro Blog</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -43,7 +44,7 @@
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="#page-top">Micro blog</a>
+                <a class="navbar-brand" href="#page-top">Micro Blog</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -54,17 +55,20 @@
                     </li>
                     <li class="page-scroll">
 						<?php
-							if($connect_util){
-						
+							if($connect_util) {
 						?>
-						<a> Bienvenue <?= $email_util ?> | Déconnexion</a>
+						<a href="./deconnexion.php">Bienvenue <?= $email_util ?>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;Déconnexion</a>
 						<?php
-							}else{
+							}
+							else {
 						?>
-                       <a href="./connexion.php">Connexion</a>
-					   <?php
+						<a href="./connexion.php" style="display:inline; float:left;">Inscription</a>
+						<a href="./connexion.php" style="display:inline; float:right;">Connexion</a>
+
+						<?php
 							}
 						?>
+					</li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->

@@ -1,6 +1,7 @@
 <?php
 	include('includes/haut.inc.php');
 	include('includes/connexion.inc.php');
+	include('includes/verif_util.inc.php');
 ?>
 
     <!-- Header -->
@@ -21,50 +22,44 @@
     <section>
         <div class="container">
             <div class="row">              
-                <form method="POST" action="message.php?a=add">
+                <form method="POST" action="article.php<?php if(isset($_GET['id'])) echo "?a=upd&id=".$_GET['id']; ?>">
                     <div class="col-sm-10">  
                         <div class="form-group">
-                            <textarea id="message" name="message" class="form-control" placeholder="Message"></textarea>
+							<textarea id="message" name="message" class="form-control" placeholder="Message"><?php if(isset($_GET['id'])) { $sql="SELECT contenu FROM messages WHERE id=:id";$prep=$pdo->prepare($sql);$prep->bindValue(':id',$_GET['id']);$prep->execute();$data=$prep->fetch();echo $data['contenu']; } ?></textarea>
                         </div>
                     </div>
                     <div class="col-sm-2">
-                        <button type="submit" class="btn btn-success btn-lg">Envoyer</button>
+                        <button type="submit" class="btn btn-success btn-lg" <?php if(!$connect_util) echo "disabled"; ?>>
+							<?php if(isset($_GET['id'])) { ?>
+							Modifier
+							<?php } else { ?>
+							Envoyer
+							<?php } ?>
+						</button>
                     </div>                        
                 </form>
             </div>
 			
-
-
             <div class="row">
                 <div class="col-md-12">
 					<?php
-						$sql="SELECT * FROM messages";
+						$sql="SELECT * FROM messages ORDER BY date DESC";
 						$stmt=$pdo->query($sql);
 						while($data=$stmt->fetch()) {
 					?>
 					<blockquote>
-						<p>
-					<?php echo $data['contenu']; ?>
-                            
-						</p>
-						<footer>
-					<?php echo date('d/m/Y H:i:s',$data['date']); ?>
-						</footer>
-                    <span><a href="message.php?a=sup&id=<?= $data['id'] ?>">Supprimer</a>
-                        <a href="index.php?id=<?= $data['id'] ?>">Modifier</a></span>
-                        <?php
-                            if(isset($_GET['id'])){
-                        ?>
-                                <div class="form-group">
-                                    <textarea id="message" name="message" class="form-control" placeholder="Message"></textarea>
-                                </div>
-                        
-                        <?php
-                            }
-                        ?>
-                        
-                        
+						<p><?= $data['contenu'] ?></p>
+						<footer><?= date('d/m/Y H:i:s',$data['date']) ?></footer>
                     </blockquote>
+					<?php	
+							if($connect_util) { 
+					?>
+					<a href="index.php?id=<?= $data['id'] ?>" class="btn btn-primary btn-xs">Modifier</a>
+					<a href="article.php?a=del&id=<?= $data['id'] ?>" class="btn btn-danger btn-xs">Supprimer</a>
+					<?php
+							}
+					?>
+					<hr>
 					<?php
 						}
 					?>
